@@ -1,4 +1,3 @@
-// src/components/ImageCard/ImageCard.jsx
 
 import css from './ImageCard.module.css';
 

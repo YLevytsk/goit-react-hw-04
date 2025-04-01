@@ -1,8 +1,8 @@
+
 import Modal from 'react-modal';
 import css from './ImageModal.module.css';
 
 Modal.setAppElement('#root');
-
 const ImageModal = ({ isOpen, onRequestClose, image }) => {
   return (
     <Modal
@@ -16,13 +16,16 @@ const ImageModal = ({ isOpen, onRequestClose, image }) => {
       closeTimeoutMS={0}
     >
       {image && (
-        <img src={image.src} alt={image.alt} className={css.image} />
+        <div className={css.wrapper} onClick={(e) => e.stopPropagation()}>
+          <img src={image.src} alt={image.alt} className={css.image} />
+        </div>
       )}
     </Modal>
   );
 };
 
 export default ImageModal;
+
 
 
 
