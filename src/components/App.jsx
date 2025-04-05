@@ -18,9 +18,9 @@ function App() {
   const [page, setPage] = useState(1);
   const [totalPhotos, setTotalPhotos] = useState(0); 
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);  // Модалка будет открываться при клике
-  const [imageData, setImageData] = useState(null);  // Состояние для данных о выбранном изображении
-  const [error, setError] = useState(null);  // Теперь ошибка определена!
+  const [selectedImage, setSelectedImage] = useState(null);  
+  const [imageData, setImageData] = useState(null);  
+  const [error, setError] = useState(null);  
 
   const handleSearch = (newQuery) => {
     if (newQuery.trim() === '') return;
@@ -35,7 +35,7 @@ function App() {
   const handleImageClick = async (image) => {
     if (selectedImage !== image) {
       setSelectedImage(image);
-      // Получаем подробности изображения через API
+      
       try {
         const response = await fetch(
           `https://api.unsplash.com/photos/${image.id}?client_id=${ACCESS_KEY}`
@@ -44,9 +44,9 @@ function App() {
         const data = await response.json();
         
         if (data && data[0]) {
-          setImageData(data[0]);  // Заполняем состояние с данными изображения
+          setImageData(data[0]);  
         } else {
-          setImageData(null);  // В случае отсутствия данных
+          setImageData(null);  
         }
       } catch (error) {
         console.error('Error fetching image details:', error);
@@ -57,7 +57,7 @@ function App() {
 
   const closeModal = () => {
     setSelectedImage(null); 
-    setImageData(null);  // Очистить данные изображения при закрытии
+    setImageData(null);  
   };
 
   const handleLoadMore = () => {
@@ -119,11 +119,11 @@ function App() {
 
       {isLoading && <Loader />}
 
-      {/* Открытие модалки с данными о фотографии */}
+      {}
       <ImageModal
-        isOpen={Boolean(selectedImage)}  // Открываем модалку, если изображение выбрано
+        isOpen={Boolean(selectedImage)} 
         onRequestClose={closeModal}
-        image={imageData}  // Передаем актуальные данные
+        image={imageData}  
       />
 
       <ToastContainer />

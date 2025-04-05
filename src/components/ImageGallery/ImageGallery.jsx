@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import ImageModal from '../ImageModal/ImageModal'; // Импортируем компонент на уровень выше
+import ImageModal from '../ImageModal/ImageModal'; 
 import css from './ImageGallery.module.css';
 
 const ImageGallery = ({ images, onImageClick }) => {
@@ -38,7 +38,7 @@ const ImageGallery = ({ images, onImageClick }) => {
         ))}
       </ul>
 
-      {/* Модалка, если изображение выбрано */}
+      {}
       {selectedImage && (
         <ImageModal
           isOpen={Boolean(selectedImage)}

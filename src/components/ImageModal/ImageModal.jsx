@@ -10,9 +10,9 @@ const ImageModal = ({ isOpen, onRequestClose, image }) => {
 
   useEffect(() => {
     if (isOpen && !localIsOpen) {
-      setLocalIsOpen(true);  // Открытие модалки
+      setLocalIsOpen(true);  
     } else if (!isOpen && localIsOpen) {
-      setLocalIsOpen(false);  // Закрытие модалки
+      setLocalIsOpen(false);  
     }
   }, [isOpen]);
 
@@ -26,7 +26,7 @@ const ImageModal = ({ isOpen, onRequestClose, image }) => {
     closeModal();
   };
 
-  if (!image) return null;  // Если изображения нет, не показываем модалку
+  if (!image) return null;  
 
   const { likes, downloads, views, alt_description, src } = image;
 
