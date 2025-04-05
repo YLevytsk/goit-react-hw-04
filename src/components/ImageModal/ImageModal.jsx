@@ -1,30 +1,93 @@
-
+import { useState, useEffect } from 'react';
 import Modal from 'react-modal';
+import { FaHeart, FaDownload, FaEye } from 'react-icons/fa';
 import css from './ImageModal.module.css';
 
 Modal.setAppElement('#root');
+
 const ImageModal = ({ isOpen, onRequestClose, image }) => {
+  const [localIsOpen, setLocalIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (isOpen && !localIsOpen) {
+      setLocalIsOpen(true);  // Открытие модалки
+    } else if (!isOpen && localIsOpen) {
+      setLocalIsOpen(false);  // Закрытие модалки
+    }
+  }, [isOpen]);
+
+  const closeModal = () => {
+    setLocalIsOpen(false);
+    onRequestClose();
+  };
+
+  const handleImageClick = (e) => {
+    e.stopPropagation();
+    closeModal();
+  };
+
+  if (!image) return null;  // Если изображения нет, не показываем модалку
+
+  const { likes, downloads, views, alt_description, src } = image;
+
   return (
     <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
+      isOpen={localIsOpen}
+      onRequestClose={closeModal}
       className={css.modal}
-      overlayClassName={css.overlay}
+      overlayClassName={css.overlayClassName}
       contentLabel="Image preview"
-      shouldCloseOnOverlayClick={true}
       shouldCloseOnEsc={true}
-      closeTimeoutMS={0}
+      closeTimeoutMS={200}
+      preventScroll={true}
     >
-      {image && (
-        <div className={css.wrapper} onClick={(e) => e.stopPropagation()}>
-          <img src={image.src} alt={image.alt} className={css.image} />
+      <div className={css['image-container']} onClick={handleImageClick}>
+        <img
+          src={src}
+          alt={alt_description || 'Image'}
+          className={css.image}
+        />
+        <div className={css['image-info']}>
+          <div className={css.item}>
+            <FaHeart className={`${css.icon} ${css['icon-heart']}`} />
+            <span className={`${css.count} ${css['count-heart']}`}>{likes || 0}</span>
+          </div>
+          <div className={css.item}>
+            <FaDownload className={`${css.icon} ${css['icon-download']}`} />
+            <span className={`${css.count} ${css['count-download']}`}>{downloads || 0}</span>
+          </div>
+          <div className={css.item}>
+            <FaEye className={`${css.icon} ${css['icon-eye']}`} />
+            <span className={`${css.count} ${css['count-eye']}`}>{views || 0}</span>
+          </div>
         </div>
-      )}
+      </div>
     </Modal>
   );
 };
 
 export default ImageModal;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,36 +1,122 @@
-.overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-  }
-  
-  .modal {
-    background: transparent;
-    border: none;
-    padding: 0;
-    outline: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .content {
-    position: relative;
-    z-index: 1;
-  }
-  
-  .image {
-    max-width: 95vw;
-    max-height: 95vh;
-    object-fit: contain;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-  }
-  
-  
-  
-  
-  
+
+.overlayClassName {
+  position: fixed;
+  inset: 0; 
+  background: rgba(0, 0, 0, 0.8); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  pointer-events: auto; 
+}
+
+.modal {
+  background: transparent;
+  border: none;
+  padding: 0;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: auto; 
+  height: 100%; 
+  overflow: hidden;
+}
+
+.image-container {
+  position: relative;
+  max-width: 95vw; 
+  max-height: 90vh; 
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  overflow: hidden;
+  pointer-events: none; 
+}
+
+.image {
+  display: block;
+  max-width: 100%; 
+  max-height: 100%; 
+  object-fit: contain; 
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  pointer-events: auto; 
+}
+
+.image-info {
+  display: flex;
+  flex-direction: row;
+  gap: 16px; 
+  align-items: center;
+  justify-content: space-evenly; 
+  width: 100%;
+  max-width: 95vw; 
+  height: 48px;
+  background-color: rgba(255, 255, 255, 1); 
+  border-top: 1px solid #808080;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.image-info .item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  height: 40px;
+  width: auto;
+}
+
+.image-info .label {
+  font-weight: 600;
+  font-size: 12px;
+  color: #2e2f42;
+}
+
+.image-info .count {
+  font-weight: 400;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  font-size: 24px; 
+  transition: color 0.3s ease; 
+}
+
+.icon:hover {
+  color: #ff6347; 
+}
+
+
+.icon-heart {
+  color: #FF5733; 
+}
+
+.icon-download {
+  color: #06be68;  
+}
+
+.icon-eye {
+  color: #5733FF;  
+}
+
+
+.count-heart {
+  color: #FF5733;  
+}
+
+.count-download {
+  color: #06be68; 
+}
+
+.count-eye {
+  color: #5733FF;  
+}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { FaRegSurprise } from 'react-icons/fa';
 import SearchBar from './SearchBar/SearchBar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Loader from './Loader/Loader';
@@ -17,8 +18,9 @@ function App() {
   const [page, setPage] = useState(1);
   const [totalPhotos, setTotalPhotos] = useState(0); 
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [error, setError] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);  // Модалка будет открываться при клике
+  const [imageData, setImageData] = useState(null);  // Состояние для данных о выбранном изображении
+  const [error, setError] = useState(null);  // Теперь ошибка определена!
 
   const handleSearch = (newQuery) => {
     if (newQuery.trim() === '') return;
@@ -30,16 +32,38 @@ function App() {
     setTotalPhotos(0); 
   };
 
-  const handleImageClick = (image) => {
-    setSelectedImage(image);
+  const handleImageClick = async (image) => {
+    if (selectedImage !== image) {
+      setSelectedImage(image);
+      // Получаем подробности изображения через API
+      try {
+        const response = await fetch(
+          `https://api.unsplash.com/photos/${image.id}?client_id=${ACCESS_KEY}`
+        );
+
+        const data = await response.json();
+        
+        if (data && data[0]) {
+          setImageData(data[0]);  // Заполняем состояние с данными изображения
+        } else {
+          setImageData(null);  // В случае отсутствия данных
+        }
+      } catch (error) {
+        console.error('Error fetching image details:', error);
+        setImageData(null);
+      }
+    }
   };
 
   const closeModal = () => {
-    setSelectedImage(null);
+    setSelectedImage(null); 
+    setImageData(null);  // Очистить данные изображения при закрытии
   };
 
   const handleLoadMore = () => {
-    setPage(prev => prev + 1);
+    if (page < 5 && images.length < totalPhotos) {
+      setPage(prev => prev + 1);
+    }
   };
 
   useEffect(() => {
@@ -47,23 +71,17 @@ function App() {
 
     const fetchImages = async () => {
       setIsLoading(true);
-      setError(null);
       try {
         const response = await fetch(
           `https://api.unsplash.com/search/photos?query=${query}&orientation=landscape&per_page=12&page=${page}&client_id=${ACCESS_KEY}`
         );
-
         const data = await response.json();
-        await new Promise(resolve => setTimeout(resolve, 1500));
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
 
         if (data.results.length === 0) {
           setError('Нічого не знайдено. Спробуйте інший запит!');
           return;
         }
+
         setTotalPhotos(data.total);
         setImages(prev => page === 1 ? data.results : [...prev, ...data.results]);
       } catch (error) {
@@ -77,32 +95,35 @@ function App() {
     fetchImages();
   }, [query, page]);
 
+  const isMaxPagesReached = page >= 5 || images.length >= totalPhotos;
+
   return (
     <div className={css.container}>
       <SearchBar onSubmit={handleSearch} />
-
       {error ? (
         <ErrorMessage message={error} />
       ) : (
         <>
           <ImageGallery images={images} onImageClick={handleImageClick} />
-
-          {images.length > 0 && !isLoading && images.length < totalPhotos && (
+          {!isMaxPagesReached && images.length > 0 && !isLoading && (
             <LoadMoreBtn onClick={handleLoadMore} />
           )}
-
-          {images.length > 0 && images.length >= totalPhotos && (
-            <p className={css.end}>Усі зображення завантажено 🎉</p>
+          {images.length > 0 && isMaxPagesReached && (
+            <p className={css.end}>
+              Усі зображення завантажено
+              <FaRegSurprise style={{fontSize: '30px', color: 'blue', verticalAlign: 'middle', marginLeft: '10px' }} />
+            </p>
           )}
         </>
       )}
 
       {isLoading && <Loader />}
 
+      {/* Открытие модалки с данными о фотографии */}
       <ImageModal
-        isOpen={Boolean(selectedImage)}
+        isOpen={Boolean(selectedImage)}  // Открываем модалку, если изображение выбрано
         onRequestClose={closeModal}
-        image={selectedImage}
+        image={imageData}  // Передаем актуальные данные
       />
 
       <ToastContainer />
@@ -111,6 +132,16 @@ function App() {
 }
 
 export default App;
+
+
+
+
+
+
+
+
+
+
 
 
 
